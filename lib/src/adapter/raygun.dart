@@ -3,6 +3,7 @@ import 'package:utopia_logger/src/adapter.dart';
 import 'package:utopia_logger/src/log/log_type.dart';
 import 'package:utopia_logger/src/log/environment.dart';
 import 'package:utopia_logger/src/log.dart';
+import 'package:utopia_logger/src/logger.dart';
 
 class Raygun extends Adapter {
   final String _apiKey;
@@ -32,7 +33,13 @@ class Raygun extends Adapter {
   Future<int> push(Log log) async {
     List breadcrumbs = [];
     for (var breadcrum in log.breadcrumbs) {
-      breadcrumbs.add(breadcrum.toMap());
+      breadcrumbs.add({
+        'category': breadcrum.category,
+        'message': breadcrum.message,
+        'type': breadcrum.type.name,
+        'level': 'request',
+        'timestamp': breadcrum.timestamp,
+      });
     }
 
     final tags = [];
@@ -42,7 +49,7 @@ class Raygun extends Adapter {
 
     tags.add('type: ${log.type.name}');
     tags.add('environment: ${log.environment.name}');
-    tags.add('sdk: utopia-dart-logger/'); // add version
+    tags.add('sdk: utopia-dart-logger/${Logger.libraryVersion}');
 
     final requestBody = {
       'occurredOn': log.timestamp,
@@ -79,7 +86,7 @@ class Raygun extends Adapter {
       }
       return response.statusCode;
     } catch (e) {
-      return 0;
+      throw 'Log could not be pushed with error: ${e.toString()}';
     }
   }
 }

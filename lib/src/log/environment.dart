@@ -1,2 +1,1 @@
-
 enum Environment { production, staging }

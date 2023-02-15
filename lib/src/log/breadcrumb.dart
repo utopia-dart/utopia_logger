@@ -12,14 +12,4 @@ class Breadcrumb {
     required this.message,
     required this.timestamp,
   });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'category': category,
-      'message': message,
-      'type': type.name,
-      'level': 'request',
-      'timestamp': timestamp,
-    };
-  }
 }
