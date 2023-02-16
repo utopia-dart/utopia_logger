@@ -12,9 +12,9 @@ class Log {
   final String action;
   final Map<String, String> tags = {};
   final Map<String, dynamic> extra = {};
-  final String namespace = 'UNKNOWN';
-  final String? server = null;
-  final User? user = null;
+  String namespace = 'UNKNOWN';
+  final String? server;
+  final User? user;
   final List<Breadcrumb> breadcrumbs = [];
 
   Log({
@@ -24,19 +24,26 @@ class Log {
     required this.version,
     required this.environment,
     required this.action,
+    this.user,
+    this.server,
+    String? namespace,
   }) {
     this.timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
+    this.namespace = namespace ?? 'UNKNOWN';
   }
 
-  void addTag(String key, String value) {
+  Log addTag(String key, String value) {
     tags[key] = value;
+    return this;
   }
 
-  void addExtra(String key, dynamic value) {
+  Log addExtra(String key, dynamic value) {
     extra[key] = value;
+    return this;
   }
 
-  void addBreadcrumb(Breadcrumb breadcrumb) {
+  Log addBreadcrumb(Breadcrumb breadcrumb) {
     breadcrumbs.add(breadcrumb);
+    return this;
   }
 }

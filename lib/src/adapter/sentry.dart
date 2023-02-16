@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:utopia_logger/src/adapter.dart';
 import 'package:utopia_logger/src/log/log_type.dart';
@@ -84,12 +86,12 @@ class Sentry extends Adapter {
     final requestBody = {
       'timestamp': log.timestamp,
       'platform': 'Dart',
-      'level': log.type,
+      'level': log.type.name,
       'logger': log.namespace,
       'transaction': log.action,
       'server_name': log.server,
       'release': log.version,
-      'environment': log.environment,
+      'environment': log.environment.name,
       'message': {
         'message': log.message,
       },
@@ -118,9 +120,9 @@ class Sentry extends Adapter {
     try {
       final response = await http.post(
           Uri.parse('$_sentryHost/api/$_projectId/store/'),
-          body: requestBody,
+          body: jsonEncode(requestBody),
           headers: {
-            'content-type': 'application/json',
+            // 'content-type': 'application/json',
             'X-Sentry-Auth':
                 'Sentry sentry_version=7, sentry_key=$_sentryKey, sentry_client=utopia-dart-logger/${Logger.libraryVersion}',
           });
