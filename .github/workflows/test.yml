@@ -18,13 +18,11 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install dependencies
         run: dart pub get
-      
-      - name: Load Env
 
-        run: |
-          export SENTRY_KEY=${{ secrets.SENTRY_KEY }}
-          export SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}
       - name: Analyze
         run: dart analyze
       - name: Test
-        run: dart test
+        run: |
+          export SENTRY_KEY=${{ secrets.SENTRY_KEY }}
+          export SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}
+          dart test
