@@ -12,13 +12,8 @@ class Sentry extends Adapter {
   late final String _projectId;
   late final String _sentryHost;
 
-  Sentry(String configKey) {
-    final chunks = configKey.split(';');
-    _sentryKey = chunks.first;
-    _projectId = chunks[1];
-    _sentryHost = chunks.length > 2 && chunks[2].isNotEmpty
-        ? chunks[2]
-        : 'https://sentry.io';
+  Sentry(this._sentryKey, this._projectId, { String? host}) {
+    _sentryHost = host ?? 'https://sentry.io';
   }
 
   static String getName() => 'sentry';

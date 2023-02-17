@@ -4,9 +4,6 @@ import 'package:utopia_logger/utopia_logger.dart';
 import 'package:test/test.dart';
 
 void main() {
-
-  
-
   group('testAdapters', () {
     final log = Log(
         action: 'delete.user',
@@ -50,7 +47,9 @@ void main() {
         .addExtra('line', 15);
     test('Sentry Adapter Test', () async {
       final adapter = Sentry(
-          '${Platform.environment["SENTRY_KEY"]};${Platform.environment["SENTRY_PROJECT"]}');
+        '${Platform.environment["SENTRY_KEY"]}',
+        '${Platform.environment["SENTRY_PROJECT"]}',
+      );
       final logger = Logger(adapter);
       final response = await logger.addLog(log);
       expect(response, 200);

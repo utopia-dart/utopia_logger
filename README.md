@@ -1,39 +1,63 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Utopia Logger
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Light & Fast Dart Logging Library
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Logging
+- Multiple Adapters
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add dependency
+
+```yaml
+dependencies:
+    utopia_logger: <latest>
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+Example
 
 ```dart
-const like = 'sample';
+import 'package:utopia_logger/utopia_logger.dart';
+
+void main() {
+  final log = Log(
+    action: 'user.delete',
+    environment: Environment.production,
+    namespace: 'api',
+    message: 'User 00ffdd not found',
+    type: LogType.error,
+    version: '0.12.0',
+    user: User(id: '00ff22'),
+    server: 'dart-server',
+    timestamp: DateTime.now().millisecondsSinceEpoch,
+  );
+
+  log.addBreadcrumb(Breadcrumb(
+      type: LogType.debug,
+      category: 'http',
+      message: 'DELETE /api/users',
+      timestamp: DateTime.now().millisecondsSinceEpoch));
+
+  log
+      .addTag('sdk', 'flutter')
+      .addTag('sdkVersion', '0.0.1')
+      .addExtra('urgent', false);
+
+  Adapter adapter = Sentry('YOUR_SENTRY_KEY', 'YOUR_SENTRY_PROJECT_ID');
+  Logger logger = Logger(adapter);
+  logger.addLog(log);
+
+  adapter = Raygun('YOUR_API_KEY');
+  logger = Logger(adapter);
+  logger.addLog(log);
+
+}
 ```
 
-## Additional information
+## Copyright and license
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+The MIT License (MIT) [https://www.opensource.org/licenses/mit-license.php](https://www.opensource.org/licenses/mit-license.php)
