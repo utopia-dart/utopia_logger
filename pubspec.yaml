@@ -1,5 +1,5 @@
 name: utopia_logger
-description: A starting point for Dart libraries or applications.
+description: Light & Fast Dart Logging library with support for multiple logging providers.
 version: 0.0.1
 repository: https://github.com/utopia-dart/utopia_logger
 
